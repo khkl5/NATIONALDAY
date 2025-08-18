@@ -1,0 +1,48 @@
+<!-- footer.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  footer.site-footer{background:#0b1f16;color:#d9f2e3;margin-top:48px}
+  .container{max-width:1100px;margin-inline:auto;padding:28px 16px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .links a{color:#d9f2e3;text-decoration:none}
+  .links a:hover{text-decoration:underline}
+  .copy{margin-top:12px;font-size:12px;color:#a7c8b8}
+  @media (max-width:720px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="grid">
+        <div>
+          <strong>تواصل</strong>
+          <div class="links" style="margin-top:8px">
+            <div>واتساب: <a href="https://wa.me/966000000000" target="_blank" rel="noopener">+966 00 000 0000</a></div>
+            <div>إنستغرام: <a href="#" target="_blank" rel="noopener">@beuniquestoree</a></div>
+            <div>تيك توك: <a href="#" target="_blank" rel="noopener">@beuniquestoree</a></div>
+          </div>
+        </div>
+        <div>
+          <strong>روابط سريعة</strong>
+          <ul style="margin:8px 0 0 0;padding:0;list-style:none">
+            <li><a href="#azkar">الأذكار</a></li>
+            <li><a href="#order">الطلب</a></li>
+            <li><a href="#about">من نحن</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copy">© <span id="year"></span> Be Unique Storee</div>
+    </div>
+  </footer>
+  <script>
+    // سنة ديناميكية
+    document.currentScript.previousElementSibling.querySelector('#year').textContent =
+      new Date().getFullYear();
+  </script>
+</body>
+</html>
+

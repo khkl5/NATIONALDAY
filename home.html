@@ -1,0 +1,522 @@
+<!-- home.html -->
+
+<style>
+  /* ====== Fonts: Saudi Regular / SemiBold ====== */
+  @font-face {
+    font-family: 'Saudi';
+    src: url('Saudi-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Saudi';
+    src: url('Saudi-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* ====== Design System / Theme ====== */
+:root[data-theme="light"] {
+  --header-bg:#f7f8f7;
+  --header-fg:#0b0f0c;
+  --green:#126b3a;
+  --green-2:#0f5d33;
+  --gold:#d4b26a;
+  --accent: var(--gold);
+  --ink:#0b0f0c;
+  --bg:#f7f8f7;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --radius:16px;
+  --shadow:0 8px 24px rgba(0,0,0,.06);
+}
+  /* ثيم داكن */
+
+
+  /* ثيم اليوم الوطني */
+  :root[data-theme="national"] {
+  --bg:#09472d;
+  --card:#ffffff;
+  --ink:#ffffff;
+  --green:#126b3a;
+  --gold:#d8c08a;
+  --accent: var(--gold);
+  --header-bg:#038750;
+  --header-fg:#ffffff;
+}
+:root[data-theme="dark"] {
+  --bg:#0f1414;
+  --card:#121818;
+  --ink:#f5f5f5;
+  --muted:#c6d0d0;
+  --green:#126b3a;
+  --gold:#d4b26a;
+  --accent: var(--gold);
+  --header-bg:#0f1414;
+  --header-fg:#ffffff;
+}
+
+  html, body { height:100% }
+  body {
+    font-family: 'Saudi', 'Tajawal', system-ui, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    margin:0;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  a { color:var(--green); }
+  .container { max-width:1100px; margin-inline:auto; padding:16px; }
+
+  .card {
+    background:var(--card);
+    border:1px solid #e8ece8;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px;
+    color:var(--ink);
+  }
+
+  .hero {
+    display:grid; gap:12px; margin:12px 0 16px; padding:18px 20px;
+    background:linear-gradient(180deg, rgba(18,107,58,.06), transparent);
+    border-radius:var(--radius);
+  }
+  .hero h1 { font-weight:600; letter-spacing:.2px; margin:6px 0 0; color:var(--ink); }
+  .hero p { margin:0; color:var(--muted); }
+
+  .kpis { display:flex; gap:10px; flex-wrap:wrap }
+  .kpi {
+    background:var(--card);
+    border:1px solid #e8ece8;
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:13px;
+    color:var(--ink);
+  }
+
+  /* Azkar */
+  .azkar { display:grid; gap:10px }
+  .azkar .controls { display:flex; gap:8px; flex-wrap:wrap }
+  .btn {
+    appearance:none; border:1px solid #e5e7eb;
+    background:var(--card); color:var(--ink);
+    padding:10px 14px; border-radius:999px;
+    cursor:pointer; font-weight:600; font-size:14px;
+  }
+  .btn.primary { background:var(--green); color:#fff; border-color:var(--green-2) }
+  .btn.ghost { background:transparent; color:var(--ink); }
+  .btn:disabled { opacity:.5; cursor:not-allowed }
+  .segment {
+    display:flex; gap:8px; background:var(--card);
+    border:1px solid #e5e7eb; border-radius:999px; padding:6px;
+  }
+  .segment button {
+    border:none; background:transparent; color:var(--ink);
+    padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:600;
+  }
+  .segment button[aria-pressed="true"] { background:var(--green); color:#fff; }
+
+  /* Sections */
+  section { margin-top:22px; color:var(--ink); }
+  section h2 { font-weight:600; letter-spacing:.15px; color:var(--ink); }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px }
+  @media (max-width:840px){ .grid-2 { grid-template-columns:1fr } }
+
+  /* Forms */
+  .field { display:grid; gap:6px }
+  .field input,.field textarea,.field select {
+    padding:12px 12px; border:1px solid #dfe5df;
+    border-radius:12px; font-size:15px; background:var(--card);
+    color:var(--ink);
+  }
+  .field small { color:var(--muted) }
+  .inline { display:flex; gap:10px; flex-wrap:wrap; align-items:center }
+
+  /* Footer spacing placeholder */
+  .spacer { height:32px }
+
+  /* SoundCloud player UI */
+  .sc-player {
+    display:grid; gap:10px; background:var(--card);
+    border:1px solid #e5e7eb; border-radius:12px; padding:12px;
+    color:var(--ink);
+  }
+  :root[data-theme="national"] .sc-player { border-color:#dfe5df }
+
+  .sc-head { display:flex; align-items:center; justify-content:space-between; gap:10px }
+  .sc-title { font-weight:700; color:var(--ink); }
+  .sc-time { font-variant-numeric:tabular-nums; color:var(--muted); font-size:13px }
+
+  .sc-bar { position:relative; height:10px; border-radius:999px; cursor:pointer; user-select:none }
+  .sc-bar__bg { position:absolute; inset:0; border-radius:999px; background:rgba(0,0,0,.08) }
+  .sc-bar__fill { position:absolute; inset:0 auto 0 0; width:0%; border-radius:999px; background:linear-gradient(90deg, var(--accent), rgba(212,178,106,.6)) }
+  .sc-bar__knob { position:absolute; top:50%; transform:translate(-50%,-50%); width:14px; height:14px; border-radius:999px; background:#fff; border:2px solid var(--accent); box-shadow:0 1px 3px rgba(0,0,0,.2) }
+
+  .sc-controls { display:flex; gap:8px; flex-wrap:wrap }
+  .icon-btn {
+    appearance:none; border:1px solid #e5e7eb;
+    background:var(--card); color:var(--ink);
+    width:42px; height:42px; border-radius:999px; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .icon-btn .ic { width:20px; height:20px; display:block }
+  .icon-btn:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,0,0,.06) }
+  .icon-btn:active { transform:translateY(0); box-shadow:none }
+  .icon-btn:disabled { opacity:.5; cursor:not-allowed; box-shadow:none }
+
+  .icon-btn.primary { background:var(--green); color:#fff; border-color:var(--green-2) }
+  .icon-btn.ghost { background:transparent; color:var(--ink) }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon-btn { transition:none; }
+  }
+
+  /* إخفاء iframe مع بقاء الأبعاد */
+  .visually-hidden-offscreen {
+    position: fixed;
+    left: -10000px;
+    top: 0;
+    width: 320px;
+    height: 180px;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    visibility: visible !important;
+  }
+  :root[data-theme="national"] .actions .btn.ghost,
+:root[data-theme="national"] .actions .btn.hamburger {
+  background:#ffffff22;   /* خلفية شفافة فاتحة */
+  color:#fff;             /* أيقونة بيضاء */
+  border-color:#ffffff55; /* حدود أوضح */
+}
+
+:root[data-theme="national"] .actions .btn.ghost:hover,
+:root[data-theme="national"] .actions .btn.hamburger:hover {
+  background:#ffffff44;   /* hover أفتح */
+}
+:root[data-theme="national"] .menu a {
+  color: var(--accent); /* الذهبي يبان أوضح */
+}
+:root[data-theme="national"] .menu a:hover {
+  background: rgba(255,255,255,.12);
+  color: #fff; /* يرجع أبيض عند التمرير */
+}
+
+:root[data-theme="national"] .mobile-menu a {
+  color: var(--accent);
+}
+:root[data-theme="national"] .mobile-menu a:hover {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+}
+/* ثيم national: نصوص الكروت داكنة، والعناوين بدون تغيير */
+:root[data-theme="national"] .card {
+  color: #0b0f0c; /* نص أساسي داكن داخل الكروت فقط */
+}
+
+/* ثبّتي لون عناوين الكروت مثل ما هو (يمشي على h1/h2/h3 فقط) */
+:root[data-theme="national"] .card h1,
+:root[data-theme="national"] .card h2,
+:root[data-theme="national"] .card h3 {
+  color: var(--ink); /* نفس لون العناوين الحالي في الثيم */
+}
+
+/* لو تبين عناصر النص الثانوية داخل الكرت تكون أوضح بعد */
+:root[data-theme="national"] .card p,
+:root[data-theme="national"] .card li,
+:root[data-theme="national"] .card small,
+:root[data-theme="national"] .card label {
+  color: #0b0f0c; /* يضمن وضوح النصوص غير العناوين */
+}
+
+/* مدخلات/حقول النموذج داخل الكرت تكتب بلون داكن أيضًا */
+:root[data-theme="national"] .card input,
+:root[data-theme="national"] .card textarea,
+:root[data-theme="national"] .card select {
+  color: #0b0f0c;
+}
+/* أزرار الكروت في ثيم national */
+:root[data-theme="national"] .card .btn {
+  background:#f8f8f8;    /* خلفية أفتح */
+  color:#0b0f0c;         /* نص داكن */
+  border-color:#ccc;     /* حدود واضحة */
+}
+
+:root[data-theme="national"] .card .btn.primary {
+  background: var(--green); /* أخضر رئيسي */
+  color:#fff;               /* نص أبيض */
+  border-color: var(--green-2);
+}
+
+:root[data-theme="national"] .card .btn:hover {
+  background:#eee; /* hover أغمق شوي */
+}
+/* أزرار التحكم في ثيم national */
+:root[data-theme="national"] .card .icon-btn {
+  background:#f8f8f8;     /* خلفية فاتحة */
+  color:#0b0f0c;          /* نص غامق */
+  border-color:#ccc;
+}
+
+:root[data-theme="national"] .card .icon-btn.primary {
+  background: var(--green); /* أخضر */
+  color:#fff;               /* نص أبيض */
+  border-color: var(--green-2);
+}
+
+:root[data-theme="national"] .card .icon-btn.ghost {
+  background:transparent;
+  color:#0b0f0c;           /* يخلي الأيقونة غامقة */
+}
+
+:root[data-theme="national"] .card .icon-btn:hover {
+  background:#eee;
+}
+/* نص أزرار الصباح/المساء في ثيم national */
+:root[data-theme="national"] .segment button {
+  color:#0b0f0c; /* نص داكن على الخلفية الفاتحة */
+}
+
+:root[data-theme="national"] .segment button[aria-pressed="true"] {
+  background: var(--green);
+  color:#fff; /* نص أبيض عند التفعيل */
+}
+</style>
+
+<main class="container" id="top">
+
+  <!-- 1) HERO -->
+  <div class="hero" role="region" aria-label="مقدمة">
+    <h1>توزيعات أنيقة لليوم الوطني… وصالحة لكل السنة 🎁</h1>
+    <p>نوعان فقط لسهولة الطلب: <strong>مدالية</strong> و<strong>تعليقة سيارة</strong>. اختر، اكتب نص النقش، وأرسل الطلب فورًا.</p>
+  </div>
+
+  <!-- 2) الأذكار -->
+<div class="azkar" id="azkar">
+  <div class="sc-player card" dir="rtl" aria-label="مشغّل الأذكار">
+    <div class="sc-head">
+      <div class="sc-title" id="scTitle">أذكار الصباح</div>
+      <div class="sc-time"><span id="tNow">00:00</span> / <span id="tTotal">00:00</span></div>
+    </div>
+
+    <div class="controls">
+      <div class="segment" role="tablist">
+        <button id="tabMorning" aria-selected="true" aria-pressed="true">الصباح</button>
+        <button id="tabEvening" aria-selected="false" aria-pressed="false">المساء</button>
+      </div>
+    </div>
+
+    <div class="sc-bar" id="seekBar">
+      <div class="sc-bar__bg"></div>
+      <div class="sc-bar__fill" id="seekFill"></div>
+      <div class="sc-bar__knob" id="seekKnob"></div>
+    </div>
+
+    <div class="sc-controls">
+      <button id="playBtn" class="icon-btn primary">▶</button>
+      <button id="pauseBtn" class="icon-btn" disabled>⏸</button>
+      <button id="stopBtn" class="icon-btn ghost" disabled>⏹</button>
+    </div>
+  </div>
+
+  <!-- ملفات الصوت -->
+  <audio id="audioMorning" preload="auto" src="assets/audio/morning.mp3"></audio>
+  <audio id="audioEvening" preload="auto" src="assets/audio/evening.mp3"></audio>
+</div>
+  <!-- 3) أزرار نوع التوزيعة -->
+  <section class="card" aria-label="اختيار نوع التوزيعة">
+    <h2 style="margin-top:0">اختاري النوع</h2>
+    <div class="inline">
+      <button class="btn" data-type="keychain">مدالية</button>
+      <button class="btn" data-type="car-hanging">تعليقة سيارة</button>
+    </div>
+    <small>يمكن تعديل النوع لاحقًا في خطوة الطلب.</small>
+  </section>
+
+  <!-- باقي الأقسام ... (الطلب / الملخص / من نحن / ... إلخ) -->
+
+  <div class="spacer"></div>
+</main>
+<script>
+/* ================== State & Utilities (Secure) ================== */
+const state = {
+  theme: 'auto', // 'auto'|'nd'|'default'
+  azkarKind: localStorage.getItem('azkarKind') || 'morning',
+  rate: parseFloat(localStorage.getItem('rate') || '1'),
+  order: { type: 'مدالية', qty: 1, engrave: '', date: '' }
+};
+// sanitize
+function sanitizeText(s=''){ return s.replace(/[<>]/g, '').trim(); }
+function enc(s){return encodeURIComponent(s);}
+
+/* ================== Theme: Auto September + Manual toggle ================== */
+function isSeptember(){ const now = new Date(); return (now.getMonth()+1)===9; }
+function applyTheme(){
+  const body = document.body;
+  const saved = localStorage.getItem('themePref') || 'auto';
+  state.theme = saved;
+  const useND = saved==='nd' ? true : saved==='default' ? false : isSeptember();
+  body.classList.toggle('theme-nd', useND);
+}
+function toggleThemeManually(){
+  const current = localStorage.getItem('themePref') || 'auto';
+  const next = current==='auto' ? 'nd' : current==='nd' ? 'default' : 'auto';
+  localStorage.setItem('themePref', next);
+  applyTheme();
+  const btn = document.querySelector('#themeToggle'); reflectThemeButton(btn);
+}
+function reflectThemeButton(btn){
+  if(!btn) return;
+  const pref = localStorage.getItem('themePref') || 'auto';
+  btn.setAttribute('aria-pressed', (pref==='nd').toString());
+}
+applyTheme();
+
+// assets/js/azkar-audio.js
+(() => {
+  // أدوات سريعة
+  const $ = (id) => document.getElementById(id);
+  const fmt = (sec) => {
+    if (!isFinite(sec)) return "00:00";
+    const s = Math.max(0, Math.floor(sec));
+    const m = Math.floor(s / 60), r = s % 60;
+    return String(m).padStart(2, "0") + ":" + String(r).padStart(2, "0");
+  };
+
+  function initIfReady() {
+    // عناصر الواجهة
+    const tabMorning = $("tabMorning");
+    const tabEvening = $("tabEvening");
+    const playBtn    = $("playBtn");
+    const pauseBtn   = $("pauseBtn");
+    const stopBtn    = $("stopBtn");
+    const seekBar    = $("seekBar");
+    const seekFill   = $("seekFill");
+    const seekKnob   = $("seekKnob");
+    const tNowEl     = $("tNow");
+    const tTotalEl   = $("tTotal");
+    const scTitleEl  = $("scTitle");
+
+    // المقاطع
+    const audioMorning = $("audioMorning");
+    const audioEvening = $("audioEvening");
+
+    // لو الصفحة انحقنت ولسه بعض العناصر ما وصلت، انتظر شوي
+    if (![tabMorning, tabEvening, playBtn, pauseBtn, stopBtn, seekBar, seekFill, seekKnob, tNowEl, tTotalEl, scTitleEl, audioMorning, audioEvening].every(Boolean)) {
+      return false;
+    }
+
+    let currentAudio = audioMorning;
+
+    function reflectButtons(isPlaying) {
+      playBtn.disabled  =  isPlaying;
+      pauseBtn.disabled = !isPlaying;
+      stopBtn.disabled  = !isPlaying && currentAudio.currentTime === 0;
+    }
+    function updateProgress() {
+      const dur = currentAudio.duration;
+      const cur = currentAudio.currentTime;
+      const pct = (!isFinite(dur) || dur <= 0) ? 0 : (cur / dur) * 100;
+      seekFill.style.width = pct + "%";
+      seekKnob.style.left  = pct + "%";
+      seekBar.setAttribute("aria-valuenow", String(Math.round(pct)));
+      tNowEl.textContent   = fmt(cur);
+      tTotalEl.textContent = fmt(dur);
+    }
+    function bind(a) {
+      ["timeupdate","loadedmetadata","durationchange"].forEach(ev => a.addEventListener(ev, updateProgress));
+      a.addEventListener("play",  () => reflectButtons(true));
+      a.addEventListener("pause", () => reflectButtons(false));
+      a.addEventListener("ended", () => { reflectButtons(false); a.currentTime = 0; updateProgress(); });
+    }
+    bind(audioMorning);
+    bind(audioEvening);
+
+    function selectTab(kind) {
+      localStorage.setItem("azkarKind", kind);
+      const isMorning = (kind === "morning");
+
+      tabMorning.setAttribute("aria-pressed",  String(isMorning));
+      tabMorning.setAttribute("aria-selected", String(isMorning));
+      tabEvening.setAttribute("aria-pressed",  String(!isMorning));
+      tabEvening.setAttribute("aria-selected", String(!isMorning));
+
+      // أوقف الحالي وارجعه للبداية
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+
+      currentAudio = isMorning ? audioMorning : audioEvening;
+      scTitleEl.textContent = isMorning ? "أذكار الصباح" : "أذكار المساء";
+
+      reflectButtons(false);
+      updateProgress();
+    }
+
+    // أزرار التشغيل
+    playBtn.addEventListener("click", () => { currentAudio.play().catch(()=>{}); });
+    pauseBtn.addEventListener("click", () => currentAudio.pause());
+    stopBtn.addEventListener("click", () => {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      reflectButtons(false);
+      updateProgress();
+    });
+
+    // التبويب
+    tabMorning.addEventListener("click", () => selectTab("morning"));
+    tabEvening.addEventListener("click", () => selectTab("evening"));
+
+    // شريط التقدم (نقر + كيبورد)
+    function seekAt(clientX){
+      const rect = seekBar.getBoundingClientRect();
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      const pct = rect.width ? (x / rect.width) : 0;
+      if (isFinite(currentAudio.duration) && currentAudio.duration > 0){
+        currentAudio.currentTime = pct * currentAudio.duration;
+        updateProgress();
+      }
+    }
+    seekBar.addEventListener("click", (e) => seekAt(e.clientX));
+    seekBar.addEventListener("keydown", (e) => {
+      if (!["ArrowLeft","ArrowRight","Home","End"].includes(e.key)) return;
+      e.preventDefault();
+      const dur = currentAudio.duration || 0;
+      if (!isFinite(dur) || dur <= 0) return;
+      const step = dur * 0.02; // 2%
+      if (e.key === "ArrowRight") currentAudio.currentTime = Math.min(dur, currentAudio.currentTime + step);
+      if (e.key === "ArrowLeft")  currentAudio.currentTime = Math.max(0,   currentAudio.currentTime - step);
+      if (e.key === "Home")       currentAudio.currentTime = 0;
+      if (e.key === "End")        currentAudio.currentTime = dur;
+      updateProgress();
+    });
+
+    // تفعيل أولي
+    selectTab(localStorage.getItem("azkarKind") || "morning");
+    updateProgress();
+    return true;
+  }
+
+  // لأن home.html يُحقن ديناميكيًا، نراقب DOM إلى أن تظهر العناصر ثم نهيئ
+  function bootWhenReady() {
+    if (initIfReady()) return;
+    const obs = new MutationObserver(() => { if (initIfReady()) obs.disconnect(); });
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootWhenReady);
+  } else {
+    bootWhenReady();
+  }
+})();
+/* ================== Quick checks ================== */
+console.assert(isSeptember()===((new Date().getMonth()+1)===9), 'isSeptember check');
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.documentElement.style.scrollBehavior='auto';
+}
+</script>

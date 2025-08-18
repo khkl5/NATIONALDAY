@@ -1,0 +1,199 @@
+<!-- header.html (FRAGMENT ONLY) -->
+<style>
+  :root{
+    --brand:#003132; --accent:#D4B26A; --text:#0b0f0f; --text-inv:#ffffff;
+    --shell:rgba(255,255,255,.06); --ring:rgba(212,178,106,.6);
+    --edge-green:#018348; --edge-deep:#03313A; --header-bg:transparent;
+  }
+  :root[data-theme="dark"]{ --bg:#0f1414; --card:#121818; --text:#eaf2f2; --text-weak:#c6d0d0; --header-bg:#0f1414; }
+  :root[data-theme="light"]{ --bg:#ffffff; --card:#f6f8f8; --text:#0f1616; --text-weak:#3b4949; --header-bg:#ffffff; }
+  :root[data-theme="national"]{
+    --bg:#195c60; --header-bg:#008750; --card:#0c1f1f;
+    --text:#eaf2f2; --text-weak:#cdd7d7; --brand:#003132; --accent:#D4B26A;
+    --edge-visible:20px; --edge-image-h:85px; --edge-overlap:13px;
+  }
+
+  /* لا نكتب ستايل body هنا؛ خليّه في index.html */
+
+  /* Header */
+  header.site-header{
+    position:sticky; top:0; z-index:60;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(0deg, rgba(255,255,255,.06), rgba(255,255,255,.12));
+    direction: rtl; /* تثبيت RTL داخل الهيدر */
+  }
+  :root[data-theme="national"] header.site-header{ background: var(--header-bg); isolation:isolate; }
+  :root[data-theme="national"] header.site-header::after{
+    content:""; position:absolute; left:0; right:0;
+    bottom: calc(-1 * var(--edge-overlap)); height: var(--edge-visible);
+    background-image:url("assets/images/footer-bg-mobile-B-7L9qbM.png");
+    background-repeat:repeat-x; background-position:bottom center;
+    background-size:auto var(--edge-image-h); pointer-events:none; z-index:2;
+  }
+
+  .container{max-width:1200px;margin-inline:auto;padding:10px 16px}
+  .bar{
+    display:grid; align-items:center; gap:12px;
+    grid-template-columns:auto 1fr auto;
+    background:var(--shell);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:16px; padding:10px 12px;
+    box-shadow:0 10px 28px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.08);
+    transition:background .2s ease, box-shadow .2s ease;
+  }
+
+  .brand{display:flex; align-items:center; gap:10px; text-decoration:none}
+  .brand .logo{height:54px; width:auto; display:block}
+  .brand .wordmark{font-weight:800; letter-spacing:.3px; color:var(--text); font-size:18px}
+  @media (max-width:520px){ .brand .logo{height:46px} .brand .wordmark{display:none} }
+
+  nav.primary{justify-self:center}
+  .menu{display:flex; gap:10px; list-style:none; padding:0; margin:0; flex-direction:row-reverse;} /* أول عنصر يظهر يمين */
+  .menu a{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 12px; border-radius:12px; text-decoration:none;
+    color:var(--text); font-weight:600; font-size:14px; position:relative;
+    transition:transform .12s ease, background .2s ease;
+    text-align:start;
+  }
+  .menu a:hover{background:rgba(255,255,255,.08); transform:translateY(-1px)}
+  .menu a:focus-visible{outline:2px solid var(--ring); outline-offset:2px}
+  .menu a.active::after{
+    content:""; position:absolute; inset:auto 12px -6px 12px; height:3px; border-radius:999px;
+    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .actions{display:flex; align-items:center; gap:8px; flex-direction:row-reverse;} /* الأزرار تظهر بمحاذاة RTL */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 14px; border-radius:999px; font-weight:700; font-size:14px; cursor:pointer;
+    border:1px solid rgba(255,255,255,.28); background:#fff; color:var(--brand);
+    box-shadow:0 6px 18px rgba(0,0,0,.16);
+    transition:transform .12s ease, background .2s ease;
+  }
+  .btn:hover{background:#f6f8f8; transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+  .btn:focus-visible{outline:2px solid var(--ring); outline-offset:2px}
+  .btn.ghost{background:transparent; color:var(--text); border-color:rgba(255,255,255,.22)}
+
+  .hamburger{display:none}
+  @media (max-width:900px){ nav.primary{display:none} .hamburger{display:inline-flex} }
+
+  .drawer{
+    position:fixed; inset:0 0 auto 0; top:68px; display:none; z-index:55;
+    background:rgba(0,0,0,.32); backdrop-filter: blur(2px);
+  }
+  .drawer[aria-hidden="false"]{display:block}
+  .sheet{ margin:8px auto 0; max-width:1200px; padding:10px 16px; }
+  .card{
+    background:var(--card); border:1px solid rgba(255,255,255,.14); border-radius:16px;
+    padding:12px; box-shadow:0 10px 28px rgba(0,0,0,.25)
+  }
+  .mobile-menu{display:grid; gap:6px; list-style:none; margin:0; padding:0}
+  .mobile-menu a{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 14px; border-radius:12px; text-decoration:none; color:var(--text); font-weight:700;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+    text-align:start;
+  }
+  @media (prefers-reduced-motion: reduce){ .bar, .menu a, .btn{transition:none} }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="bar">
+      <a class="brand" href="#top" aria-label="العودة للأعلى">
+        <img class="logo" src="assets/images/ND95-LOGO-white.png" alt="شعار اليوم الوطني" loading="eager" decoding="async" />
+        <span class="wordmark">Be&nbsp;Unique</span>
+      </a>
+
+      <nav class="primary" aria-label="التنقل الرئيسي">
+        <ul class="menu">
+          <li><a href="#home" class="active">الرئيسية</a></li>
+          <li><a href="#about">من نحن</a></li>
+          <li><a href="#services">الخدمات</a></li>
+          <li><a href="#gallery">الأعمال</a></li>
+          <li><a href="#contact">تواصل</a></li>
+        </ul>
+      </nav>
+
+      <div class="actions">
+        <button id="themeToggle" class="btn ghost" type="button" aria-pressed="false" aria-label="تبديل الثيم">🌗</button>
+        <button id="menuToggle" class="btn hamburger" type="button" aria-expanded="false" aria-controls="mobileDrawer" aria-label="فتح القائمة">☰</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mobileDrawer" class="drawer" aria-hidden="true">
+    <div class="sheet">
+      <div class="card" role="dialog" aria-modal="true" aria-label="قائمة الموبايل">
+        <ul class="mobile-menu">
+          <li><a href="#home">الرئيسية <span>↗</span></a></li>
+          <li><a href="#about">من نحن <span>↗</span></a></li>
+          <li><a href="#services">الخدمات <span>↗</span></a></li>
+          <li><a href="#gallery">الأعمال <span>↗</span></a></li>
+          <li><a href="#contact">تواصل <span>↗</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script data-once>
+  (function(){
+    const THEMES = ["dark", "light", "national"];
+
+    const saved = localStorage.getItem("theme");
+    const initial = THEMES.includes(saved) ? saved : "dark";
+    document.documentElement.setAttribute("data-theme", initial);
+
+    const btn = document.getElementById("themeToggle");
+    if(btn){
+      btn.setAttribute("aria-pressed", initial === "dark");
+      btn.title = labelFor(initial);
+      btn.textContent = iconFor(initial);
+    }
+
+    document.getElementById("themeToggle")?.addEventListener("click", () => {
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+
+      const b = document.getElementById("themeToggle");
+      if(b){
+        b.setAttribute("aria-pressed", next === "dark");
+        b.title = labelFor(next);
+        b.textContent = iconFor(next);
+      }
+    });
+
+    function labelFor(theme){
+      switch(theme){
+        case "dark": return "وضع داكن";
+        case "light": return "وضع فاتح";
+        case "national": return "ثيم اليوم الوطني";
+        default: return "تبديل الثيم";
+      }
+    }
+    function iconFor(theme){
+      switch(theme){
+        case "dark": return "🌑";
+        case "light": return "🌞";
+        case "national": return "🇸🇦";
+        default: return "🌗";
+      }
+    }
+
+    const drawer = document.getElementById("mobileDrawer");
+    const menuBtn = document.getElementById("menuToggle");
+    function closeDrawer(){ drawer?.setAttribute("aria-hidden","true"); menuBtn?.setAttribute("aria-expanded","false"); }
+    function openDrawer(){ drawer?.setAttribute("aria-hidden","false"); menuBtn?.setAttribute("aria-expanded","true"); }
+    menuBtn?.addEventListener("click", () => {
+      const hidden = drawer?.getAttribute("aria-hidden") !== "false";
+      hidden ? openDrawer() : closeDrawer();
+    });
+    drawer?.addEventListener("click", (e) => { if(e.target === drawer) closeDrawer(); });
+    window.addEventListener("keydown", (e) => { if(e.key === "Escape") closeDrawer(); });
+  })();
+</script>

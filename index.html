@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>موقعي على نتلايفاي</title>
+  <meta name="description" content="موقع ثابت مع نموذج تواصل يعمل عبر Netlify Forms بدون باك-إند.">
+
+  <!-- خط Tajawal (HTTPS آمن) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* قيَم عامة قابلة للتعديل */
+  :root{
+    --page-max: 1200px;   /* أقصى عرض للمحتوى الداخلي */
+    --gutter: 16px;       /* حافة جانبية على الجهتين */
+    --radius: 16px;
+  }
+
+  /* أساسيات */
+  *{ box-sizing: border-box; }
+  html{ direction: rtl; }
+  body{
+    margin: 0;
+    padding: 0;
+    line-height: 1.7;
+    font-family: Tajawal, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg, #ffffff);
+    color: var(--ink, #0b0f0c);
+  }
+
+  /* وسائط مرنة افتراضيًا */
+  img, video, iframe{ max-width: 100%; height: auto; display: block; }
+
+  /* حاوية عامة للمحتوى (الهيدر والهوم لديهم .container داخلي بالفعل) */
+  .page-wrap{
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* مساحة بسيطة تحت الهيدر المثبّت */
+  main{ margin-top: 12px; }
+
+  /* تقليل الحركة لذوي الحساسية */
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+  }
+/* index.html — استبدلي التعريف كاملًا بهذا */
+.visually-hidden-offscreen{
+  position: fixed;          /* يثبت العنصر خارج الشاشة بدون تغيير أبعاده */
+  left: -10000px; top: 0;
+  width: 320px; height: 180px; /* أبعاد فعلية للـ iframe */
+  border: 0;
+  /* ملاحظة: لا نستخدم visibility:hidden ولا display:none */
+}
+
+</style>
+
+</head>
+
+<body>
+
+  <!-- هنا رح ينزل الهيدر -->
+  <div id="header"></div>
+
+  <!-- هنا رح ينزل المحتوى الرئيسي -->
+  <div id="home"></div>
+
+  <!-- هنا رح ينزل الفوتر -->
+  <div id="footer"></div>
+
+
+<script>
+  // تعقّب الملفات التي شغّلنا سكربتها مرة
+  const loadedScriptsForFile = new Set();
+
+  async function loadPart(id, file) {
+    const mount = document.getElementById(id);
+    if (!mount) {
+      console.warn('loadPart: لم يتم العثور على العنصر', id);
+      return;
+    }
+
+    try {
+      const res = await fetch(file, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('فشل تحميل: ' + file);
+      const html = await res.text();
+
+      // نبني fragment ونفصل السكربتات
+      const tpl = document.createElement('template');
+      tpl.innerHTML = html.trim();
+      const frag = tpl.content;
+
+      const scripts = [...frag.querySelectorAll('script')];
+      scripts.forEach(s => s.remove());
+
+      // نركّب المحتوى
+      mount.innerHTML = '';
+      mount.appendChild(frag);
+
+      // شغّل السكربتات
+      for (const old of scripts) {
+        // احترم data-once + ملف سبق شغّلناه
+        if (old.hasAttribute('data-once') && loadedScriptsForFile.has(file)) continue;
+
+        const s = document.createElement('script');
+        // انسخ جميع الخصائص
+        for (const { name, value } of [...old.attributes]) {
+          s.setAttribute(name, value);
+        }
+        if (old.src) {
+          // ملاحظة أمان: اعتمدي على https فقط
+          s.src = old.src;
+        } else {
+          s.textContent = old.textContent || '';
+        }
+        document.body.appendChild(s);
+      }
+
+      // علّمي أن الملف هذا تم تشغيله
+      loadedScriptsForFile.add(file);
+    } catch (err) {
+      console.error(err);
+      mount.innerHTML = `<p style="color:#b00020">تعذّر تحميل ${file}</p>`;
+    }
+  }
+
+  // تحميل الأجزاء (عدّلي IDs حسب ما عندك بالـ index)
+  document.addEventListener('DOMContentLoaded', () => {
+    loadPart('header', 'header.html');
+    loadPart('home', 'home.html');
+    loadPart('footer', 'footer.html');
+  });
+</script>
+</body>
+</html>
