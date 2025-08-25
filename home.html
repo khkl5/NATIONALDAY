@@ -39,7 +39,7 @@
   :root[data-theme="national"] {
   --bg:#09472d;
   --card:#ffffff;
-  --ink:#ffffff;
+  --ink:#023a1b;
   --green:#126b3a;
   --gold:#d8c08a;
   --accent: var(--gold);
@@ -286,14 +286,33 @@
   background: var(--green);
   color:#fff; /* نص أبيض عند التفعيل */
 }
+/* ثيم اليوم الوطني: الأقسام مثل "اختاري النوع" */
+:root[data-theme="national"] section.card h2 {
+  color: #023a1b; /* أخضر غامق */
+}
+
+/* نخلي العناوين داخل الـ hero والكروت بيضاء وما تتغير */
+:root[data-theme="national"] .hero h1,
+:root[data-theme="national"] .hero h2,
+:root[data-theme="national"] .hero h3,
+:root[data-theme="national"] .card h1,
+:root[data-theme="national"] .card h2,
+:root[data-theme="national"] .card h3 {
+  color: #fff;
+}
+h4 {
+  font-size: medium;
+  color: #ffffff;
+}
+
 </style>
 
 <main class="container" id="top">
 
   <!-- 1) HERO -->
   <div class="hero" role="region" aria-label="مقدمة">
-    <h1>توزيعات أنيقة لليوم الوطني… وصالحة لكل السنة 🎁</h1>
-    <p>نوعان فقط لسهولة الطلب: <strong>مدالية</strong> و<strong>تعليقة سيارة</strong>. اختر، اكتب نص النقش، وأرسل الطلب فورًا.</p>
+    <h1>عزّنا بطبعِنا.. وبه نجدد أمجادنا </h1>
+    <h4>نوعان فقط لسهولة الطلب: <strong>مدالية</strong> و<strong>تعليقة سيارة</strong>. اختر، اكتب نص النقش، وأرسل الطلب فورًا.</h4>
   </div>
 
   <!-- 2) الأذكار -->
@@ -330,13 +349,76 @@
 </div>
   <!-- 3) أزرار نوع التوزيعة -->
   <section class="card" aria-label="اختيار نوع التوزيعة">
-    <h2 style="margin-top:0">اختاري النوع</h2>
+    <h2 class="sc-title" style="margin-top:0">اختاري النوع</h2>
     <div class="inline">
       <button class="btn" data-type="keychain">مدالية</button>
       <button class="btn" data-type="car-hanging">تعليقة سيارة</button>
     </div>
     <small>يمكن تعديل النوع لاحقًا في خطوة الطلب.</small>
   </section>
+  <!-- من نحن -->
+<section class="card about" id="about" dir="rtl" role="region" aria-labelledby="aboutTitle">
+  <h2 id="aboutTitle" style="margin:0">من نحن</h2>
+  <p class="about__text">
+    في <strong>Be Unique Storee</strong> نحتفل باليوم الوطني بابتكار توزيعات مميزة كل عام.
+    نختار مهارة جديدة تعلمناها خلال السنة ونحوّلها إلى تصاميم وقطع
+    <strong>3D</strong> مطبوعة تعبّر عن هويتنا وحبنا للوطن.
+  </p>
+</section>
+  <!-- 9) تواصل معي -->
+<section id="contact" class="card" aria-label="تواصل معي">
+  <h2 style="margin-top:0">تواصل معي</h2>
+  <form id="contactForm" name="contact-me" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="contact-me" />
+    <p style="display:none">
+      <label>Don’t fill this out: <input name="bot-field" /></label>
+    </p>
+
+    <div class="field">
+      <label for="cname">اسمك</label>
+      <input id="cname" type="text" name="name" required />
+    </div>
+
+    <div class="field">
+      <label for="cemail">بريدك</label>
+      <input id="cemail" type="email" name="email" required />
+    </div>
+
+    <div class="field">
+      <label for="cmsg">رسالتك</label>
+      <textarea id="cmsg" name="message" rows="4" required></textarea>
+    </div>
+
+    <button class="btn primary" type="submit">إرسال</button>
+  </form>
+
+  <!-- رسالة نجاح -->
+  <div id="formSuccess" style="display:none; margin-top:12px; color:green; font-weight:600">
+    ✅ تم إرسال رسالتك بنجاح
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('contactForm');
+  const successMsg = document.getElementById('formSuccess');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault(); // منع الإرسال الافتراضي
+
+    const data = new FormData(form);
+    try {
+      await fetch("/", {
+        method: "POST",
+        body: data,
+      });
+      form.style.display = "none";        // إخفاء الفورم
+      successMsg.style.display = "block"; // إظهار رسالة النجاح
+    } catch (error) {
+      alert("❌ حصل خطأ أثناء الإرسال. حاول مرة ثانية.");
+    }
+  });
+</script>
+
 
   <!-- باقي الأقسام ... (الطلب / الملخص / من نحن / ... إلخ) -->
 
