@@ -290,21 +290,34 @@
 :root[data-theme="national"] section.card h2 {
   color: #023a1b; /* أخضر غامق */
 }
-
-/* نخلي العناوين داخل الـ hero والكروت بيضاء وما تتغير */
+/* نخلي عناوين الـ hero بيضاء فقط */
 :root[data-theme="national"] .hero h1,
 :root[data-theme="national"] .hero h2,
-:root[data-theme="national"] .hero h3,
+:root[data-theme="national"] .hero h3 {
+  color: #fff;
+}
+
+/* ثيم اليوم الوطني: الأقسام مثل "اختاري النوع" (تظل أخضر غامق) */
+:root[data-theme="national"] section.card h2 {
+  color: #023a1b;
+}
+
+/* إذا تبين الحفاظ على لون عناوين الكروت الافتراضي داخل الكرت */
 :root[data-theme="national"] .card h1,
 :root[data-theme="national"] .card h2,
 :root[data-theme="national"] .card h3 {
-  color: #fff;
+  color: var(--ink);
 }
-h4 {
-  font-size: medium;
-  color: #ffffff;
+/* h4 داخل الـ hero في الوضع العادي (light/dark) */
+:root[data-theme="light"] .hero h4,
+:root[data-theme="dark"] .hero h4 {
+  color: var(--ink); /* غامق */
 }
 
+/* h4 داخل الـ hero في ثيم اليوم الوطني */
+:root[data-theme="national"] .hero h4 {
+  color: #fff; /* أبيض */
+}
 </style>
 
 <main class="container" id="top">
@@ -402,18 +415,24 @@ h4 {
   const form = document.getElementById('contactForm');
   const successMsg = document.getElementById('formSuccess');
 
-  form.addEventListener('submit', async function(e){
-    e.preventDefault(); // منع الإرسال الافتراضي
+  function encodeFormData(fd){
+    return new URLSearchParams([...fd]).toString();
+  }
 
+  form?.addEventListener('submit', async function(e){
+    e.preventDefault();
     const data = new FormData(form);
+    if(!data.has('form-name')) data.set('form-name', 'contact-me');
+
     try {
       await fetch("/", {
         method: "POST",
-        body: data,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encodeFormData(data),
       });
-      form.style.display = "none";        // إخفاء الفورم
-      successMsg.style.display = "block"; // إظهار رسالة النجاح
-    } catch (error) {
+      form.style.display = "none";
+      successMsg.style.display = "block";
+    } catch {
       alert("❌ حصل خطأ أثناء الإرسال. حاول مرة ثانية.");
     }
   });
@@ -438,25 +457,36 @@ function enc(s){return encodeURIComponent(s);}
 
 /* ================== Theme: Auto September + Manual toggle ================== */
 function isSeptember(){ const now = new Date(); return (now.getMonth()+1)===9; }
+
 function applyTheme(){
-  const body = document.body;
   const saved = localStorage.getItem('themePref') || 'auto';
-  state.theme = saved;
+  // useND: الوطني في سبتمبر تلقائيًا أو عند اختيار المستخدم
   const useND = saved==='nd' ? true : saved==='default' ? false : isSeptember();
-  body.classList.toggle('theme-nd', useND);
+
+  // مبدئيًا: light أو national
+  const themeAttr = useND ? 'national' : 'light';
+
+  // نعيّن الثيم المطلوب على <html>
+  document.documentElement.setAttribute('data-theme', themeAttr);
+
+  // (اختياري) لو تحبين الاحتفاظ بالكلاس القديم ما يضر، بس ما عاد نعتمد عليه
+  document.body.classList.toggle('theme-nd', useND);
 }
+
 function toggleThemeManually(){
   const current = localStorage.getItem('themePref') || 'auto';
   const next = current==='auto' ? 'nd' : current==='nd' ? 'default' : 'auto';
   localStorage.setItem('themePref', next);
   applyTheme();
-  const btn = document.querySelector('#themeToggle'); reflectThemeButton(btn);
+  const btn = document.querySelector('#themeToggle');
+  reflectThemeButton(btn);
 }
 function reflectThemeButton(btn){
   if(!btn) return;
   const pref = localStorage.getItem('themePref') || 'auto';
   btn.setAttribute('aria-pressed', (pref==='nd').toString());
 }
+
 applyTheme();
 
 // assets/js/azkar-audio.js
