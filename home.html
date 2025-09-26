@@ -139,6 +139,15 @@
   /* Footer spacing placeholder */
   .spacer { height:32px }
 
+  /* Separator between sections */
+  .section-sep {
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.12);
+    margin: 14px 0 18px;
+  }
+  :root[data-theme="dark"] .section-sep { border-top-color: rgba(255,255,255,.18); }
+  :root[data-theme="national"] .section-sep { border-top-color: rgba(2,58,27,.25); }
+
   /* SoundCloud player UI */
   .sc-player {
     display:grid; gap:10px; background:var(--card);
@@ -325,50 +334,47 @@
   <!-- 1) HERO -->
   <div class="hero" role="region" aria-label="مقدمة">
     <h1>عزّنا بطبعِنا.. وبه نجدد أمجادنا </h1>
-    <h4>نوعان فقط لسهولة الطلب: <strong>مدالية</strong> و<strong>تعليقة سيارة</strong>. اختر، اكتب نص النقش، وأرسل الطلب فورًا.</h4>
+    <h4>الابتدائية الأولى<strong>مدالية</strong> و<strong>تعليقة سيارة</strong>. اختر، اكتب نص النقش، وأرسل الطلب فورًا.</h4>
   </div>
 
-  <!-- 2) الأذكار -->
-<div class="azkar" id="azkar">
-  <div class="sc-player card" dir="rtl" aria-label="مشغّل الأذكار">
-    <div class="sc-head">
-      <div class="sc-title" id="scTitle">أذكار الصباح</div>
-      <div class="sc-time"><span id="tNow">00:00</span> / <span id="tTotal">00:00</span></div>
-    </div>
+  <!-- 2) مشاركات اليوم الوطني -->
+  <section class="card" aria-label="مشاركات اليوم الوطني">
+    <h2 class="sc-title" style="margin-top:0">اختاري النوع</h2>
+    <a class="btn ghost" href="https://padlet.com/hasahalbani/padlet-66thovshdm3jj3fj" target="_blank" rel="noopener noreferrer" aria-label="افتح لوحة المشاركات في تبويب جديد">لوحة المشاركات</a>
+  </section>
+  <hr class="section-sep" role="separator" aria-hidden="true">
+  <!-- 3) الأذكار -->
+  <div class="azkar" id="azkar">
+    <div class="sc-player card" dir="rtl" aria-label="مشغّل الأذكار">
+      <div class="sc-head">
+        <div class="sc-title" id="scTitle">أذكار الصباح</div>
+        <div class="sc-time"><span id="tNow">00:00</span> / <span id="tTotal">00:00</span></div>
+      </div>
 
-    <div class="controls">
-      <div class="segment" role="tablist">
-        <button id="tabMorning" aria-selected="true" aria-pressed="true">الصباح</button>
-        <button id="tabEvening" aria-selected="false" aria-pressed="false">المساء</button>
+      <div class="controls">
+        <div class="segment" role="tablist">
+          <button id="tabMorning" aria-selected="true" aria-pressed="true">الصباح</button>
+          <button id="tabEvening" aria-selected="false" aria-pressed="false">المساء</button>
+        </div>
+      </div>
+
+      <div class="sc-bar" id="seekBar">
+        <div class="sc-bar__bg"></div>
+        <div class="sc-bar__fill" id="seekFill"></div>
+        <div class="sc-bar__knob" id="seekKnob"></div>
+      </div>
+
+      <div class="sc-controls">
+        <button id="playBtn" class="icon-btn primary">▶</button>
+        <button id="pauseBtn" class="icon-btn" disabled>⏸</button>
+        <button id="stopBtn" class="icon-btn ghost" disabled>⏹</button>
       </div>
     </div>
 
-    <div class="sc-bar" id="seekBar">
-      <div class="sc-bar__bg"></div>
-      <div class="sc-bar__fill" id="seekFill"></div>
-      <div class="sc-bar__knob" id="seekKnob"></div>
-    </div>
-
-    <div class="sc-controls">
-      <button id="playBtn" class="icon-btn primary">▶</button>
-      <button id="pauseBtn" class="icon-btn" disabled>⏸</button>
-      <button id="stopBtn" class="icon-btn ghost" disabled>⏹</button>
-    </div>
+    <!-- ملفات الصوت -->
+    <audio id="audioMorning" preload="auto" src="assets/audio/morning.mp3"></audio>
+    <audio id="audioEvening" preload="auto" src="assets/audio/evening.mp3"></audio>
   </div>
-
-  <!-- ملفات الصوت -->
-  <audio id="audioMorning" preload="auto" src="assets/audio/morning.mp3"></audio>
-  <audio id="audioEvening" preload="auto" src="assets/audio/evening.mp3"></audio>
-</div>
-  <!-- 3) أزرار نوع التوزيعة -->
-  <section class="card" aria-label="اختيار نوع التوزيعة">
-    <h2 class="sc-title" style="margin-top:0">اختاري النوع</h2>
-    <div class="inline">
-      <button class="btn" data-type="keychain">مدالية</button>
-      <button class="btn" data-type="car-hanging">تعليقة سيارة</button>
-    </div>
-    <small>يمكن تعديل النوع لاحقًا في خطوة الطلب.</small>
-  </section>
   <!-- من نحن -->
 <section class="card about" id="about" dir="rtl" role="region" aria-labelledby="aboutTitle">
   <h2 id="aboutTitle" style="margin:0">من نحن</h2>
